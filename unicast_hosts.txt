@@ -1,0 +1,2 @@
+opensearch-node1
+opensearch-node2
