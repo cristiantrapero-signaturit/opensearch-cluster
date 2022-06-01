@@ -6,7 +6,7 @@ services:
     environment:
       - cluster.name=opensearch
       - node.name=ops-master-1
-      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - discovery.seed_providers=file
       - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
       - node.roles=cluster_manager
       - bootstrap.memory_lock=true 
@@ -20,6 +20,7 @@ services:
         hard: 65536
     volumes:
       - ops-master-1:/usr/share/opensearch/data
+      - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
 
@@ -29,7 +30,7 @@ services:
     environment:
       - cluster.name=opensearch
       - node.name=ops-master-2
-      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - discovery.seed_providers=file
       - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
       - node.roles=cluster_manager
       - bootstrap.memory_lock=true
@@ -43,7 +44,7 @@ services:
         hard: 65536
     volumes:
       - ops-master-2:/usr/share/opensearch/data
-      
+      - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
 
@@ -53,7 +54,7 @@ services:
     environment:
       - cluster.name=opensearch
       - node.name=ops-master-3
-      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - discovery.seed_providers=file
       - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
       - node.roles=cluster_manager
       - bootstrap.memory_lock=true 
@@ -67,7 +68,7 @@ services:
         hard: 65536
     volumes:
       - ops-master-3:/usr/share/opensearch/data
-      
+      - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
 
@@ -77,7 +78,7 @@ services:
     environment:
       - cluster.name=opensearch
       - node.name=ops-data-1
-      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - discovery.seed_providers=file
       - node.roles=data,ingest
       - bootstrap.memory_lock=true 
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
@@ -90,7 +91,7 @@ services:
         hard: 65536
     volumes:
       - ops-data-1:/usr/share/opensearch/data
-      
+      - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
 
@@ -100,7 +101,7 @@ services:
     environment:
       - cluster.name=opensearch
       - node.name=ops-data-2
-      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - discovery.seed_providers=file
       - node.roles=data,ingest
       - bootstrap.memory_lock=true 
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
@@ -113,7 +114,7 @@ services:
         hard: 65536
     volumes:
       - ops-data-2:/usr/share/opensearch/data
-      
+      - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
 

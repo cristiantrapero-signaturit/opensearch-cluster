@@ -1,2 +1,5 @@
-opensearch-node1
-opensearch-node2
+ops-master-1
+ops-master-2
+ops-master-3
+ops-data-1
+ops-data-2
