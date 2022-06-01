@@ -1,0 +1,143 @@
+version: '3'
+services:
+  ops-master-1:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-master-1
+    environment:
+      - cluster.name=opensearch
+      - node.name=ops-master-1
+      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
+      - node.roles=cluster_manager
+      - bootstrap.memory_lock=true 
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ops-master-1:/usr/share/opensearch/data
+    networks:
+      - opensearch-net
+
+  ops-master-2:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-master-2
+    environment:
+      - cluster.name=opensearch
+      - node.name=ops-master-2
+      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
+      - node.roles=cluster_manager
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ops-master-2:/usr/share/opensearch/data
+      
+    networks:
+      - opensearch-net
+
+  ops-master-3:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-master-3
+    environment:
+      - cluster.name=opensearch
+      - node.name=ops-master-3
+      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - cluster.initial_cluster_manager_nodes=ops-master-1,ops-master-2,ops-master-3
+      - node.roles=cluster_manager
+      - bootstrap.memory_lock=true 
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ops-master-3:/usr/share/opensearch/data
+      
+    networks:
+      - opensearch-net
+
+  ops-data-1:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-data-1
+    environment:
+      - cluster.name=opensearch
+      - node.name=ops-data-1
+      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - node.roles=data,ingest
+      - bootstrap.memory_lock=true 
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ops-data-1:/usr/share/opensearch/data
+      
+    networks:
+      - opensearch-net
+
+  ops-data-2:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-data-2
+    environment:
+      - cluster.name=opensearch
+      - node.name=ops-data-2
+      - discovery.seed_hosts=ops-master-1,ops-master-2,ops-master-3,ops-data-1,ops-data-2
+      - node.roles=data,ingest
+      - bootstrap.memory_lock=true 
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" 
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ops-data-2:/usr/share/opensearch/data
+      
+    networks:
+      - opensearch-net
+
+  ops-dashboard:
+      image: opensearchproject/opensearch-dashboards:2.0.0
+      container_name: ops-dashboard
+      ports:
+        - 5601:5601
+      expose:
+        - "5601"
+      volumes:
+      - ops-dashboard:/usr/share/opensearch/data
+      environment:
+        OPENSEARCH_HOSTS: '["https://ops-master-1:9200","https://ops-master-2:9200","https://ops-master-3:9200"]'
+      networks:
+        - opensearch-net
+
+volumes:
+  ops-dashboard:
+  ops-master-1:
+  ops-master-2:
+  ops-master-3:
+  ops-data-1:
+  ops-data-2:
+
+networks:
+  opensearch-net:

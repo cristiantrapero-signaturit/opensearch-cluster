@@ -26,3 +26,6 @@ run:
 
 run-dashboard:
 	docker-compose -f dashboard.yml up
+
+install-terraform:
+	./install-terraform.sh

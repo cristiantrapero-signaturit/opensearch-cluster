@@ -1,14 +1,15 @@
 version: '3'
 services:
-  opensearch-node3:
-    image: opensearchproject/opensearch:1.3.2
-    container_name: opensearch-node3
+  ops-master-3:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-master-3
     environment:
       - cluster.name=opensearch-cluster
-      - node.name=opensearch-node3
+      - node.name=ops-master-3
       - discovery.seed_providers=file
-      # - cluster.initial_master_nodes=opensearch-node1,opensearch-node2,opensearch-node3
+      # - cluster.initial_master_nodes=opensearch-node1,opensearch-node2,ops-master-3
       - bootstrap.memory_lock=true
+      - node.roles=cluster_manager
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -18,7 +19,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - opensearch-data3:/usr/share/opensearch/data
+      - ops-master-3:/usr/share/opensearch/data
       - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     ports:
       - 9203:9200
@@ -27,7 +28,7 @@ services:
 
 
 volumes:
-  opensearch-data3:
+  ops-master-3:
 
 networks:
   opensearch-net:

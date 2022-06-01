@@ -1,13 +1,14 @@
 version: '3'
 services:
-  opensearch-node5:
-    image: opensearchproject/opensearch:1.3.2
-    container_name: opensearch-node5
+  ops-data-2:
+    image: opensearchproject/opensearch:2.0.0
+    container_name: ops-data-2
     environment:
       - cluster.name=opensearch-cluster
-      - node.name=opensearch-node5
+      - node.name=ops-data-2
       # - discovery.seed_providers=file
       - bootstrap.memory_lock=true
+      - node.roles=data,ingest
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -17,7 +18,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - opensearch-data5:/usr/share/opensearch/data
+      - ops-data-2:/usr/share/opensearch/data
       - ./unicast_hosts.txt:/usr/share/opensearch/config/unicast_hosts.txt
     networks:
       - opensearch-net
@@ -25,7 +26,7 @@ services:
       - 9205:9200
 
 volumes:
-  opensearch-data5:
+  ops-data-2:
 
 networks:
   opensearch-net:
